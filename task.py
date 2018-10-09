@@ -1,5 +1,6 @@
 import numpy as np
 from physics_sim import PhysicsSim
+from math import sqrt
 
 class Task():
     """Task (environment) that defines the goal and provides feedback to the agent."""
@@ -20,7 +21,7 @@ class Task():
 
         self.state_size = self.action_repeat * 6
         self.action_low = 0
-        self.action_high = 900
+        self.action_high = 3000
         self.action_size = 4
 
         # Goal
@@ -28,7 +29,19 @@ class Task():
 
     def get_reward(self):
         """Uses current pose of sim to return reward."""
-        reward = 1.-.3*(abs(self.sim.pose[:3] - self.target_pos)).sum()
+        
+        #reward = 1 - 0.003*(abs(self.sim.pose[:3] - self.target_pos)).sum()
+        #reward = 1.-.00003*(abs(self.sim.pose[:3] - self.target_pos)).sum()
+        distancia = (abs(self.sim.pose[:3] - self.target_pos)).sum()
+        #print(self.sim.pose[:3])
+        #print(self.target_pos)
+        #print(distancia)
+        peso = .003
+        #if distancia>10:
+        #    peso = .3     
+        reward = 1.- peso * distancia
+        #print(reward)
+        #print(reward)
         return reward
 
     def step(self, rotor_speeds):
